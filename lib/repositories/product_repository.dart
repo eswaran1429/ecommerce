@@ -7,9 +7,8 @@ class ProductRepository {
   final Dio _dio = DioClient.instance;
 
   Future<List<ProductModel>> fetchProducts({
-    int offset = 0,
-    int limit = 10,
-    String? search,
+    required int offset,
+    required int limit,
   }) async {
     try {
       final response = await _dio.get(
@@ -17,7 +16,6 @@ class ProductRepository {
         queryParameters: {
           "offset": offset,
           "limit": limit,
-          if (search != null && search.isNotEmpty) "title": search,
         },
       );
 
@@ -26,7 +24,7 @@ class ProductRepository {
       final products =
           data.map((e) => ProductModel.fromJson(e)).toList();
 
-      // ✅ cache only first page (important)
+      // ✅ cache only first page
       if (offset == 0) {
         final box = HiveService.getProductBox();
         await box.clear();
@@ -35,13 +33,12 @@ class ProductRepository {
 
       return products;
     } catch (e) {
-      // 🔥 offline fallback
       final box = HiveService.getProductBox();
 
       if (box.isNotEmpty) {
         return box.values.cast<ProductModel>().toList();
       } else {
-        throw Exception("No data available");
+        throw Exception("No data");
       }
     }
   }

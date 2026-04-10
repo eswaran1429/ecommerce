@@ -8,7 +8,9 @@ class HiveService {
   static const String productBox = 'products';
   static const String cartBox = 'cart';
 
-  
+  static Box<ProductModel> getWishlistBox() {
+    return Hive.box<ProductModel>('wishlistBox');
+  }
 
   static Future<void> init() async {
     final dir = await getApplicationDocumentsDirectory();
@@ -20,9 +22,9 @@ class HiveService {
 
     await Hive.openBox(productBox);
     await Hive.openBox(cartBox);
+    await Hive.openBox<ProductModel>('wishlistBox');
   }
 
   static Box getProductBox() => Hive.box(productBox);
   static Box getCartBox() => Hive.box(cartBox);
 }
-

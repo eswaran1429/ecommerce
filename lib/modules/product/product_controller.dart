@@ -10,14 +10,16 @@ class ProductController extends GetxController {
   var filteredProducts = <ProductModel>[].obs;
 
   var isLoading = false.obs;
+  var isLoadingMore = false.obs;
   var hasError = false.obs;
 
   var searchQuery = ''.obs;
 
   final scrollController = ScrollController();
 
-  int page = 1;
+  int offset = 0;
   final int limit = 10;
+  bool hasMore = true;
 
   @override
   void onInit() {
@@ -25,11 +27,11 @@ class ProductController extends GetxController {
 
     fetchProducts();
 
-    // 🔥 Debounce search
+    // 🔥 debounce search
     debounce(searchQuery, (_) => applySearch(),
         time: const Duration(milliseconds: 500));
 
-    // 🔥 Infinite scroll
+    // 🔥 infinite scroll
     scrollController.addListener(() {
       if (scrollController.position.pixels >=
           scrollController.position.maxScrollExtent - 200) {
@@ -38,15 +40,24 @@ class ProductController extends GetxController {
     });
   }
 
+  // ✅ FIRST LOAD
   Future<void> fetchProducts() async {
     try {
       isLoading.value = true;
       hasError.value = false;
 
-      final data = await _repo.fetchProducts();
+      offset = 0;
+      hasMore = true;
+
+      final data = await _repo.fetchProducts(
+        offset: offset,
+        limit: limit,
+      );
 
       products.assignAll(data);
       filteredProducts.assignAll(data);
+
+      offset += limit;
     } catch (e) {
       hasError.value = true;
     } finally {
@@ -54,28 +65,53 @@ class ProductController extends GetxController {
     }
   }
 
+  // ✅ LOAD MORE (REAL PAGINATION)
+  Future<void> loadMore() async {
+    if (isLoadingMore.value || !hasMore) return;
+
+    try {
+      isLoadingMore.value = true;
+
+      final newData = await _repo.fetchProducts(
+        offset: offset,
+        limit: limit,
+      );
+
+      if (newData.isEmpty) {
+        hasMore = false;
+        return;
+      }
+
+      // ✅ avoid duplicates
+      final unique = newData.where(
+        (p) => !products.any((e) => e.id == p.id),
+      );
+
+      products.addAll(unique);
+
+      offset += limit;
+
+      applySearch(); // 🔥 reapply search after new data
+    } catch (e) {
+      hasError.value = true;
+    } finally {
+      isLoadingMore.value = false;
+    }
+  }
+
+  // ✅ SEARCH
   void applySearch() {
     if (searchQuery.value.isEmpty) {
       filteredProducts.assignAll(products);
     } else {
       filteredProducts.assignAll(
-        products
-            .where((p) => p.title
-                .toLowerCase()
-                .contains(searchQuery.value.toLowerCase()))
-            .toList(),
+        products.where((p) {
+          return p.title
+              .toLowerCase()
+              .contains(searchQuery.value.toLowerCase());
+        }).toList(),
       );
     }
-  }
-
-  void loadMore() {
-    // FakeStoreAPI doesn’t support pagination
-    // so we simulate it (important interview trick)
-
-    if (products.isEmpty) return;
-
-    final moreItems = List<ProductModel>.from(products);
-    filteredProducts.addAll(moreItems);
   }
 
   void retry() {
