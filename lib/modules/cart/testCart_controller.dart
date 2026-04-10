@@ -1,4 +1,3 @@
-// cart_controller.dart
 import 'package:ecommerce/models/cart_item_model.dart';
 import 'package:ecommerce/models/product_model.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ecommerce/models/product_model.dart';
 
-import 'testCart_controller.dart';
+import 'package:ecommerce/modules/cart/testCart_controller.dart';
 
 void main() {
   late TestCartController controller;
@@ -19,7 +19,6 @@ void main() {
     controller = TestCartController();
   });
 
-  // ✅ Add item
   test("Add item to cart", () {
     controller.addToCart(mockProduct);
 
@@ -27,7 +26,6 @@ void main() {
     expect(controller.cartItems.first.quantity, 1);
   });
 
-  // ✅ Increment
   test("Increment quantity", () {
     controller.addToCart(mockProduct);
     controller.addToCart(mockProduct);
@@ -35,7 +33,6 @@ void main() {
     expect(controller.cartItems.first.quantity, 2);
   });
 
-  // ✅ Decrement
   test("Decrease quantity", () {
     controller.addToCart(mockProduct);
     controller.addToCart(mockProduct);
@@ -45,7 +42,6 @@ void main() {
     expect(controller.cartItems.first.quantity, 1);
   });
 
-  // ✅ Remove when quantity = 1
   test("Remove item when quantity is 1", () {
     controller.addToCart(mockProduct);
 
@@ -54,15 +50,13 @@ void main() {
     expect(controller.cartItems.isEmpty, true);
   });
 
-  // ✅ Total calculation
   test("Total price calculation", () {
-    controller.addToCart(mockProduct); // 100
-    controller.addToCart(mockProduct); // 200
+    controller.addToCart(mockProduct);
+    controller.addToCart(mockProduct);
 
     expect(controller.totalPrice, 200);
   });
 
-  // ✅ Stock limit
   test("Should not exceed max stock", () {
     for (int i = 0; i < TestCartController.maxStock + 2; i++) {
       controller.addToCart(mockProduct);

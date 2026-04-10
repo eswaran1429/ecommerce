@@ -24,7 +24,6 @@ class ProductRepository {
       final products =
           data.map((e) => ProductModel.fromJson(e)).toList();
 
-      // ✅ cache only first page
       if (offset == 0) {
         final box = HiveService.getProductBox();
         await box.clear();

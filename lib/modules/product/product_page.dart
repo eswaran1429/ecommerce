@@ -12,7 +12,7 @@ class ProductPage extends StatelessWidget {
 
   final ProductController controller = Get.find<ProductController>();
   final WishlistController wishlistController =
-      Get.find<WishlistController>(); // ✅ CORRECT
+      Get.find<WishlistController>(); 
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +54,7 @@ class ProductPage extends StatelessWidget {
                 ],
               ),
               child: TextField(
+                autofocus: false,
                 onChanged: (value) => controller.searchQuery.value = value,
                 decoration: const InputDecoration(
                   hintText: "Search products...",
@@ -154,7 +155,6 @@ class ProductPage extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              // IMAGE
                               Container(
                                 width: 90,
                                 height: 90,
@@ -182,7 +182,6 @@ class ProductPage extends StatelessWidget {
 
                               const SizedBox(width: 14),
 
-                              // DETAILS
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,7 +197,6 @@ class ProductPage extends StatelessWidget {
                                 ),
                               ),
 
-                              // ❤️ WISHLIST BUTTON (FIXED)
                               Obx(() {
                                 final isWishlisted = wishlistController.wishlist
                                     .any((p) => p.id == product.id);
@@ -222,7 +220,6 @@ class ProductPage extends StatelessWidget {
                       );
                     }
 
-                    // 🔥 LOAD MORE INDICATOR
                     return Obx(() {
                       return controller.isLoadingMore.value
                           ? const Padding(

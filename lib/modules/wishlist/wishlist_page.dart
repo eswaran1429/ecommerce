@@ -1,10 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../utils/utils.dart';
+import '../cart/cart_controller.dart';
 import '../product/product_detail_page.dart';
 import 'wishlist_controller.dart';
 
 class WishlistPage extends StatelessWidget {
-  final controller = Get.put(WishlistController());
+  final controller = Get.find<WishlistController>();
+
+  final CartController cartController = Get.find<CartController>();
 
   WishlistPage({super.key});
 
@@ -44,9 +49,9 @@ class WishlistPage extends StatelessWidget {
                       ],
                     ),
                     child: const Icon(
-                      Icons.favorite_border_rounded,
+                      Icons.bookmark_border,
                       size: 42,
-                      color: Colors.redAccent,
+                      color: Colors.black,
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -98,7 +103,6 @@ class WishlistPage extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    
                     Container(
                       width: 90,
                       height: 90,
@@ -109,9 +113,26 @@ class WishlistPage extends StatelessWidget {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                          product.image,
+                        child: CachedNetworkImage(
+                          imageUrl: product.image,
                           fit: BoxFit.contain,
+                          placeholder: (context, url) => const AppShimmer(
+                            width: 90,
+                            height: 90,
+                            radius: 12,
+                          ),
+                          errorWidget: (context, url, error) {
+                            return Container(
+                              color: Colors.grey.shade200,
+                              child: const Center(
+                                child: Icon(
+                                  Icons.image_not_supported,
+                                  color: Colors.grey,
+                                  size: 30,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ),
@@ -148,7 +169,7 @@ class WishlistPage extends StatelessWidget {
                           ),
                         ],
                       ),
-                    ),  
+                    ),
                     IconButton(
                       icon: const Icon(
                         Icons.bookmark,

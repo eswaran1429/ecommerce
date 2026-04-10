@@ -37,11 +37,10 @@ class ProductModel {
       title: json['title'] ?? '',
       price: (json['price'] as num).toDouble(),
       description: json['description'] ?? '',
-      category: json['category']?['name'] ?? '', // 👈 nested
+      category: json['category']?['name'] ?? '',
       images: List<String>.from(json['images'] ?? []),
     );
   }
 
-  // 👉 Helpful getter
   String get image => images.isNotEmpty ? images.first : '';
 }

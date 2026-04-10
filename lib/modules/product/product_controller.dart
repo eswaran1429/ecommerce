@@ -27,11 +27,9 @@ class ProductController extends GetxController {
 
     fetchProducts();
 
-    // 🔥 debounce search
     debounce(searchQuery, (_) => applySearch(),
         time: const Duration(milliseconds: 500));
 
-    // 🔥 infinite scroll
     scrollController.addListener(() {
       if (scrollController.position.pixels >=
           scrollController.position.maxScrollExtent - 200) {
@@ -40,7 +38,6 @@ class ProductController extends GetxController {
     });
   }
 
-  // ✅ FIRST LOAD
   Future<void> fetchProducts() async {
     try {
       isLoading.value = true;
@@ -65,7 +62,6 @@ class ProductController extends GetxController {
     }
   }
 
-  // ✅ LOAD MORE (REAL PAGINATION)
   Future<void> loadMore() async {
     if (isLoadingMore.value || !hasMore) return;
 
@@ -82,7 +78,6 @@ class ProductController extends GetxController {
         return;
       }
 
-      // ✅ avoid duplicates
       final unique = newData.where(
         (p) => !products.any((e) => e.id == p.id),
       );
@@ -91,7 +86,7 @@ class ProductController extends GetxController {
 
       offset += limit;
 
-      applySearch(); // 🔥 reapply search after new data
+      applySearch();
     } catch (e) {
       hasError.value = true;
     } finally {
@@ -99,7 +94,6 @@ class ProductController extends GetxController {
     }
   }
 
-  // ✅ SEARCH
   void applySearch() {
     if (searchQuery.value.isEmpty) {
       filteredProducts.assignAll(products);

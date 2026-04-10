@@ -70,8 +70,8 @@ class ProductDetailPage extends StatelessWidget {
                       Get.snackbar(
                         "Success",
                         "Added to cart",
-                        snackPosition: SnackPosition.BOTTOM,
-                        backgroundColor: Colors.black87,
+                        snackPosition: SnackPosition.TOP,
+                        backgroundColor: const Color.fromARGB(255, 156, 156, 156),
                         colorText: Colors.white,
                         margin: const EdgeInsets.all(16),
                         borderRadius: 12,

@@ -9,7 +9,7 @@ class AppInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    print("✅ RESPONSE: ${response.statusCode}");
+    print("RESPONSE: ${response.statusCode}");
     return handler.next(response);
   }
 
@@ -17,7 +17,6 @@ class AppInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     print("❌ ERROR: ${err.message}");
 
-    // Retry once for network errors
     if (_shouldRetry(err)) {
       try {
         final response = await _retry(err.requestOptions);

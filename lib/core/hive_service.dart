@@ -16,7 +16,6 @@ class HiveService {
     final dir = await getApplicationDocumentsDirectory();
     Hive.init(dir.path);
 
-    // Register adapters here later
     Hive.registerAdapter(ProductModelAdapter());
     Hive.registerAdapter(CartItemModelAdapter());
 

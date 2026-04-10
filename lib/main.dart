@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'bindings/wishlist_binding.dart';
 import 'core/hive_service.dart';
-import 'modules/wishlist/wishlist_controller.dart';
 import 'routes/app_pages.dart';
 import 'routes/app_routes.dart';
 

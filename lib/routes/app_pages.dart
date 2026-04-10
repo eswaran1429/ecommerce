@@ -28,7 +28,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.wishlist,
       page: () => WishlistPage(),
-      binding: InitialBinding()
+      binding: CartBinding()
     ),
   ];
 }
