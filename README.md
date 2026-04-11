@@ -104,12 +104,6 @@ flutter run
 
 ---
 
-## 📸 Screenshots
-
-*(Add your app screenshots here)*
-
----
-
 ## 💡 Key Highlights
 
 * Optimistic UI updates (instant feedback)
@@ -119,23 +113,3 @@ flutter run
 * Testable business logic
 
 ---
-
-## 📌 Future Improvements
-
-* Payment integration
-* User authentication
-* Order history
-* Backend integration
-
----
-
-## 👨‍💻 Author
-
-**Your Name**
-Flutter Developer
-
----
-
-## ⭐ If you like this project
-
-Give it a ⭐ on GitHub!
